@@ -1,0 +1,27 @@
+Metadata-Version: 2.4
+Name: otpylib-config
+Version: 0.1.1
+Summary: Runtime configuration management for otpylib applications with hot reloading and change notifications
+Author-email: HeroesLament <nunya@biz.net>
+License: MIT
+Project-URL: Homepage, https://github.com/HeroesLament/otpylib-config
+Project-URL: Repository, https://github.com/HeroesLament/otpylib-config.git
+Project-URL: Issues, https://github.com/HeroesLament/otpylib-config/issues
+Keywords: configuration,config,otp,supervision,hot-reload
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: System :: Systems Administration
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: otpylib>=0.4.7
+Requires-Dist: result>=0.17.0
+Requires-Dist: tomli>=2.2.1
+Provides-Extra: toml
+Requires-Dist: tomli>=2.0.0; python_version < "3.11" and extra == "toml"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"

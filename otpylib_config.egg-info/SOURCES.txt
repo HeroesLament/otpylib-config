@@ -1,0 +1,6 @@
+pyproject.toml
+otpylib_config.egg-info/PKG-INFO
+otpylib_config.egg-info/SOURCES.txt
+otpylib_config.egg-info/dependency_links.txt
+otpylib_config.egg-info/requires.txt
+otpylib_config.egg-info/top_level.txt

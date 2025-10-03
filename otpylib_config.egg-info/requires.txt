@@ -1,0 +1,9 @@
+otpylib>=0.3.9
+anyio>=4.0.0
+result>=0.17.0
+tomli>=2.2.1
+
+[toml]
+
+[toml:python_version < "3.11"]
+tomli>=2.0.0

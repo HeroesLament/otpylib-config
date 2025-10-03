@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Basic Example",
+      "type": "debugpy",
+      "request": "launch",
+
+      // Run your example as a module
+      "module": "examples.basic.main",
+
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}",
+
+      // Force uv’s venv interpreter
+      "python": "${workspaceFolder}/.venv/bin/python",
+
+      // Keep PYTHONPATH pointed at src/
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      }
+    }
+  ]
+}
