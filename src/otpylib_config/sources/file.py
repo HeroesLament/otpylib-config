@@ -2,12 +2,12 @@
 """
 File Configuration Source
 
-Load configuration from TOML or JSON files with change detection.
+Load configuration from TOML or JSON files. Always re-read on every load.
 """
 
 import json
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from dataclasses import dataclass
 
 from .base import ConfigSource
@@ -28,7 +28,6 @@ class FileSource(ConfigSource):
     path: str
     format: str = "toml"
     _priority: int = 1
-    _last_modified: float = 0
     
     @property
     def priority(self) -> int:
@@ -38,29 +37,24 @@ class FileSource(ConfigSource):
     def name(self) -> str:
         return f"file:{self.path}"
     
-    async def load(self) -> Optional[Dict[str, Any]]:
-        """Load configuration from file."""
+    async def load(self) -> Dict[str, Any]:
+        """Always read configuration fresh from disk."""
         path = Path(self.path)
-        
         if not path.exists():
             return {}
         
         try:
-            stat = path.stat()
-            if stat.st_mtime <= self._last_modified:
-                return None  # No changes
-            
-            self._last_modified = stat.st_mtime
-            
-            with open(path, 'rb') as f:
+            with open(path, "rb") as f:
                 if self.format.lower() == "toml":
                     if tomllib is None:
                         raise ImportError("TOML support requires 'tomli' package")
-                    return tomllib.load(f)
+                    data = tomllib.load(f)
                 elif self.format.lower() == "json":
-                    return json.load(f)
+                    data = json.load(f)
                 else:
                     raise ValueError(f"Unsupported format: {self.format}")
-                    
-        except Exception as e:
+            
+            return data if isinstance(data, dict) else {}
+        
+        except Exception:
             return {}

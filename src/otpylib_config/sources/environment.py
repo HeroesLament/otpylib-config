@@ -7,7 +7,7 @@ Load configuration from environment variables with prefix support.
 
 import os
 import json
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from dataclasses import dataclass
 
 from .base import ConfigSource
@@ -28,9 +28,11 @@ class EnvironmentSource(ConfigSource):
     def name(self) -> str:
         return f"env:{self.prefix or 'all'}"
     
-    async def load(self) -> Optional[Dict[str, Any]]:
-        """Load configuration from environment variables."""
-        config = {}
+    async def load(self) -> Dict[str, Any]:
+        """Load configuration from environment variables.
+        Always returns a dict (may be empty).
+        """
+        config: Dict[str, Any] = {}
 
         for key, value in os.environ.items():
             if self.prefix and not key.startswith(self.prefix):
@@ -42,11 +44,9 @@ class EnvironmentSource(ConfigSource):
             else:
                 config_key = key.lower().replace('_', '.')
 
-            # Skip empty config keys
             if not config_key:
                 continue
             
-            # Parse value to appropriate Python type
             parsed_value = self._parse_value(value)
             self._set_nested_value(config, config_key, parsed_value)
 
@@ -54,30 +54,24 @@ class EnvironmentSource(ConfigSource):
     
     def _parse_value(self, value: str) -> Any:
         """Parse string value to appropriate Python type."""
-        # Handle boolean
         if value.lower() in ('true', 'false'):
             return value.lower() == 'true'
         
-        # Handle None/null
         if value.lower() in ('none', 'null', ''):
             return None
         
-        # Try numeric types
         try:
             if '.' not in value:
                 return int(value)
-            else:
-                return float(value)
+            return float(value)
         except ValueError:
             pass
         
-        # Try JSON for complex types
         try:
             return json.loads(value)
         except (json.JSONDecodeError, ValueError):
             pass
         
-        # Return as string
         return value
     
     def _set_nested_value(self, config: Dict[str, Any], key: str, value: Any):
@@ -86,9 +80,7 @@ class EnvironmentSource(ConfigSource):
         current = config
         
         for part in parts[:-1]:
-            if part not in current:
-                current[part] = {}
-            elif not isinstance(current[part], dict):
+            if part not in current or not isinstance(current[part], dict):
                 current[part] = {}
             current = current[part]
         

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: otpylib-config
-Version: 0.1.1
+Version: 0.1.2
 Summary: Runtime configuration management for otpylib applications with hot reloading and change notifications
 Author-email: HeroesLament <nunya@biz.net>
 License: MIT
@@ -25,3 +25,5 @@ Provides-Extra: toml
 Requires-Dist: tomli>=2.0.0; python_version < "3.11" and extra == "toml"
 Provides-Extra: dev
 Requires-Dist: pytest>=7.0.0; extra == "dev"
+
+# otpylib-config

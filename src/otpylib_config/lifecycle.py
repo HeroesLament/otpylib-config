@@ -38,10 +38,11 @@ async def start(config_spec: ConfigSpec):
     async def config_supervisor():
         """Run the config manager supervisor."""
         genserver_spec = supervisor.child_spec(
-            id="config_mgr_genserver",
+            id=CONFIG_MANAGER,
             func=gen_server.start,
             args=[callbacks, config_spec, CONFIG_MANAGER],
             restart=PERMANENT,
+            name=CONFIG_MANAGER,
         )
         
         ticker_spec = supervisor.child_spec(
