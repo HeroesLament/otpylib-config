@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Configuration Manager Core Business Logic
 
@@ -14,9 +13,12 @@ import fnmatch
 from typing import Dict, Any, List, Callable
 from result import Ok, Err, Result
 
+from otpylib import atom, process
 from otpylib_config.data import ConfigManagerState, ReloadResult
 from otpylib_config.atoms import config_path_atom, path_from_atom
-import otpylib_logger as logger
+
+# Logger target
+LOGGER = atom.ensure("logger")
 
 
 async def ensure_config_value(path: str, value: Any, state: ConfigManagerState) -> Result[Dict[str, Any], str]:
@@ -155,7 +157,7 @@ async def reconcile_configuration(state: ConfigManagerState) -> Result[ReloadRes
                 sources_failed += 1
                 error_msg = f"Failed to load from source {source.name}: {e}"
                 errors.append(error_msg)
-                await logger.error("[CONFIG] %s", error_msg)
+                await process.send(LOGGER, ("log", "ERROR", f"[CONFIG] {error_msg}", {}))
         
         source_configs.sort(key=lambda x: x[0])
         merged_config: Dict[str, Any] = {}
