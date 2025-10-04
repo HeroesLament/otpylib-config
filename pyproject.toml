@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "otpylib-config"
-version = "0.1.2"
+version = "0.1.3"
 description = "Runtime configuration management for otpylib applications with hot reloading and change notifications"
 readme = "README.md"
 license = {text = "MIT"}
